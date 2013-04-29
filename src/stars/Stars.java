@@ -101,7 +101,7 @@ public class Stars {
 				}
 				//Covers the right most column
 				else if(x + 1 == width){
-					Node n  = nodes.get((x << 16) + y);
+					n  = nodes.get((x << 16) + y);
 					Node down = new Node(x, y+1, img.getRGB(x, y+1));
 					nodes.put((((long) x) << 16 + ((long) y+1)), n);
 					Edge e = new Edge(n, down, n.intensity + down.intensity);
