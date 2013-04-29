@@ -65,15 +65,14 @@ public class Stars {
           //Hashmap (16 bits: x, 16 bits: y)
           nodes.put(n.getCoordinate(), n);
 
-
           Node right = new Node(x+1, y, img.getRGB(x+1, y));
-          nodes.put(n.getCoordinate(), n);
+          nodes.put(right.getCoordinate(), right);
           Edge e = new Edge(n, right, n.intensity + right.intensity);
           if (edgeNeeded(e))
             edges.add(e);
 
           Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put(n.getCoordinate(), n);
+          nodes.put(down.getCoordinate(), down);
           e = new Edge(n, right, n.intensity + down.intensity);
           if (edgeNeeded(e))
             edges.add(e);
@@ -89,13 +88,13 @@ public class Stars {
             //This could be moved in the previous if block
             //The first row will not have been created vs all other rows would have been.
             Node down = new Node(x, y+1, img.getRGB(x, y+1));
-            nodes.put(n.getCoordinate(), n);
+            nodes.put(down.getCoordinate(), down);
             Edge e = new Edge(n, down, n.intensity + down.intensity);
             if (edgeNeeded(e))
               edges.add(e);
 
             Node right = new Node(x+1, y, img.getRGB(x, y));
-            nodes.put(n.getCoordinate(), n);
+            nodes.put(right.getCoordinate(), right);
             e = new Edge(n, right, n.intensity + right.intensity);
             if (edgeNeeded(e))
               edges.add(e);
@@ -103,20 +102,18 @@ public class Stars {
           //If we are at the edge, don't add the right edge, duh.
           else{
             Node down = new Node(x, y+1, img.getRGB(x, y+1));
-            nodes.put(n.getCoordinate(), n);
+            nodes.put(down.getCoordinate(), down);
             Edge e = new Edge(n, down, n.intensity + down.intensity);
             if (edgeNeeded(e))
               edges.add(e);
           }
-
-
-
         }
         //Covers the bottom row
         else if(y + 1 == height){
           if(x+1 != width){
             n  = nodes.get(Node.makeCoordinate(x, y));
-            Node right = nodes.get(Node.makeCoordinate(x+1, y));
+            Node right = new Node(x+1, y, img.getRGB(x, y));
+            nodes.put(right.getCoordinate(), right);
             Edge e = new Edge(n, right, n.intensity + right.intensity);
             if (edgeNeeded(e))
               edges.add(e);
@@ -126,7 +123,7 @@ public class Stars {
         else if(x + 1 == width){
           n  = nodes.get(Node.makeCoordinate(x, y));
           Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put(n.getCoordinate(), n);
+          nodes.put(down.getCoordinate(), down);
           Edge e = new Edge(n, down, n.intensity + down.intensity);
           if (edgeNeeded(e))
             edges.add(e);
@@ -137,18 +134,19 @@ public class Stars {
           n  = nodes.get(Node.makeCoordinate(x, y));
 
           Node right = new Node(x+1, y, img.getRGB(x, y));
-          nodes.put(n.getCoordinate(), n);
+          nodes.put(right.getCoordinate(), right);
           Edge e = new Edge(n, right, n.intensity + right.intensity);
           if (edgeNeeded(e))
             edges.add(e);
 
 
           Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put(n.getCoordinate(), n);
+          nodes.put(down.getCoordinate(), down);
           e = new Edge(n, down, n.intensity + down.intensity);
           if (edgeNeeded(e))
             edges.add(e);
         }
+        System.out.println("Finished (" + x + ", " + y + ")");
       }
     }
 
