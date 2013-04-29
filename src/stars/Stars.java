@@ -46,17 +46,17 @@ public class Stars {
         if(x == 0 && y == 0){
           n = new Node(x, y, img.getRGB(x, y));
           //Hashmap (16 bits: x, 16 bits: y)
-          nodes.put((((long) x) << 16 + ((long) y)), n);
+          nodes.put(n.getCoordinate(), n);
 
 
           Node right = new Node(x+1, y, img.getRGB(x+1, y));
-          nodes.put((((long) x) << 16 + ((long) y)), n);
+          nodes.put(n.getCoordinate(), n);
           Edge e = new Edge(n, right, n.intensity + right.intensity);
           if (edgeNeeded(e))
             edges.add(e);
 
           Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put((((long) x) << 16 + ((long) y)), n);
+          nodes.put(n.getCoordinate(), n);
           e = new Edge(n, right, n.intensity + down.intensity);
           if (edgeNeeded(e))
             edges.add(e);
@@ -65,20 +65,20 @@ public class Stars {
         //Checks the first row
         else if(y==0){
           //This will be used to make the edge nodes
-          n = nodes.get((x << 16) + y);
+          n = nodes.get(Node.makeCoordinate(x, y));
 
           //Check if we have anything on the right
           if(x+1 != width){
             //This could be moved in the previous if block
             //The first row will not have been created vs all other rows would have been.
             Node down = new Node(x, y+1, img.getRGB(x, y+1));
-            nodes.put((((long) x) << 16 + ((long) y+1)), n);
+            nodes.put(n.getCoordinate(), n);
             Edge e = new Edge(n, down, n.intensity + down.intensity);
             if (edgeNeeded(e))
               edges.add(e);
 
             Node right = new Node(x+1, y, img.getRGB(x, y));
-            nodes.put((((long) x+1) << 16 + ((long) y)), n);
+            nodes.put(n.getCoordinate(), n);
             e = new Edge(n, right, n.intensity + right.intensity);
             if (edgeNeeded(e))
               edges.add(e);
@@ -86,7 +86,7 @@ public class Stars {
           //If we are at the edge, don't add the right edge, duh.
           else{
             Node down = new Node(x, y+1, img.getRGB(x, y+1));
-            nodes.put((((long) x) << 16 + ((long) y+1)), n);
+            nodes.put(n.getCoordinate(), n);
             Edge e = new Edge(n, down, n.intensity + down.intensity);
             if (edgeNeeded(e))
               edges.add(e);
@@ -98,8 +98,8 @@ public class Stars {
         //Covers the bottom row
         else if(y + 1 == height){
           if(x+1 != width){
-            n  = nodes.get((x << 16) + y);
-            Node right = nodes.get(((x+1) << 16) + y);
+            n  = nodes.get(Node.makeCoordinate(x, y));
+            Node right = nodes.get(Node.makeCoordinate(x+1, y));
             Edge e = new Edge(n, right, n.intensity + right.intensity);
             if (edgeNeeded(e))
               edges.add(e);
@@ -107,9 +107,9 @@ public class Stars {
         }
         //Covers the right most column
         else if(x + 1 == width){
-          n  = nodes.get((x << 16) + y);
+          n  = nodes.get(Node.makeCoordinate(x, y));
           Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put((((long) x) << 16 + ((long) y+1)), n);
+          nodes.put(n.getCoordinate(), n);
           Edge e = new Edge(n, down, n.intensity + down.intensity);
           if (edgeNeeded(e))
             edges.add(e);
@@ -117,17 +117,17 @@ public class Stars {
         }
         //Creates all the non first, bottom, or right nodes and relationships
         else{
-          n  = nodes.get((x << 16) + y);
+          n  = nodes.get(Node.makeCoordinate(x, y));
 
           Node right = new Node(x+1, y, img.getRGB(x, y));
-          nodes.put((((long) x+1) << 16 + ((long) y)), n);
+          nodes.put(n.getCoordinate(), n);
           Edge e = new Edge(n, right, n.intensity + right.intensity);
           if (edgeNeeded(e))
             edges.add(e);
 
 
           Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put((((long) x) << 16 + ((long) y+1)), n);
+          nodes.put(n.getCoordinate(), n);
           e = new Edge(n, down, n.intensity + down.intensity);
           if (edgeNeeded(e))
             edges.add(e);

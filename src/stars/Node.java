@@ -15,7 +15,15 @@ public class Node {
     rank = 0;
   }
 
+  public long getCoordinate() {
+    return makeCoordinate(x, y);
+  }
 
-
-
+  /**
+   * Combines the x, y ints into 1 long with x being first 16 bits, y the second
+   * @return
+   */
+  public static long makeCoordinate(int x, int y) {
+    return ((long) x) << 16 + ((long) y);
+  }
 }
