@@ -128,5 +128,11 @@ public class Stars {
 
 			}
 		}
+		
+		Iterator<Edge> itr = edges.iterator();
+		while (itr.hasNext()){
+			Edge e = itr.next();
+			
+		}
 	}
 }
