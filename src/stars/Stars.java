@@ -64,15 +64,15 @@ public class Stars {
 				}
 				//Checks the first row
 				else if(y==0){
+				  //This will be used to make the edge nodes
+	     n = nodes.get((x << 16) + y);
+	     
 					//Check if we have anything on the right
 					if(x+1 != width){
 						
 					
 					//This could be moved in the previous if block
 					//The first row will not have been created vs all other rows would have been.
-
-					//This will be used to make the edge nodes
-					n = nodes.get((x << 16) + y);
 
 					Node down = new Node(x, y+1, img.getRGB(x, y+1));
 					nodes.put((((long) x) << 16 + ((long) y+1)), n);
