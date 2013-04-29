@@ -11,6 +11,9 @@ public class Stars {
 
 	private static int minIntensity = 64;
 	private static String inputFileName = "stars.jpg";
+ // right now these are very uneducated guesses...
+ public static final int INTENSITY_THRESHOLD = 200;
+ public static final int GRADIENT_THRESHOLD = 45;
 
 	public static void main(String[] args) {
 		//Variables
@@ -49,12 +52,14 @@ public class Stars {
 					Node right = new Node(x+1, y, img.getRGB(x+1, y));
 					nodes.put((((long) x) << 16 + ((long) y)), n);
 					Edge e = new Edge(n, right, n.intensity + right.intensity);
-					edges.add(e);
+					if (edgeNeeded(e))
+					  edges.add(e);
 
 					Node down = new Node(x, y+1, img.getRGB(x, y+1));
 					nodes.put((((long) x) << 16 + ((long) y)), n);
 					e = new Edge(n, right, n.intensity + down.intensity);
-					edges.add(e);
+					if (edgeNeeded(e))
+					  edges.add(e);
 
 				}
 				//Checks the first row
@@ -72,19 +77,22 @@ public class Stars {
 					Node down = new Node(x, y+1, img.getRGB(x, y+1));
 					nodes.put((((long) x) << 16 + ((long) y+1)), n);
 					Edge e = new Edge(n, down, n.intensity + down.intensity);
-					edges.add(e);
+					if (edgeNeeded(e))
+					  edges.add(e);
 
 					Node right = new Node(x+1, y, img.getRGB(x, y));
 					nodes.put((((long) x+1) << 16 + ((long) y)), n);
 					e = new Edge(n, right, n.intensity + right.intensity);
-					edges.add(e);
+					if (edgeNeeded(e))
+					  edges.add(e);
 					}
 					//If we are at the edge, don't add the right edge, duh.
 					else{
 						Node down = new Node(x, y+1, img.getRGB(x, y+1));
 						nodes.put((((long) x) << 16 + ((long) y+1)), n);
 						Edge e = new Edge(n, down, n.intensity + down.intensity);
-						edges.add(e);
+						if (edgeNeeded(e))
+						  edges.add(e);
 					}
 						
 
@@ -105,7 +113,8 @@ public class Stars {
 					Node down = new Node(x, y+1, img.getRGB(x, y+1));
 					nodes.put((((long) x) << 16 + ((long) y+1)), n);
 					Edge e = new Edge(n, down, n.intensity + down.intensity);
-					edges.add(e);
+					if (edgeNeeded(e))
+					  edges.add(e);
 
 				}
 				//Creates all the non first, bottom, or right nodes and relationships
@@ -115,13 +124,15 @@ public class Stars {
 					Node right = new Node(x+1, y, img.getRGB(x, y));
 					nodes.put((((long) x+1) << 16 + ((long) y)), n);
 					Edge e = new Edge(n, right, n.intensity + right.intensity);
-					edges.add(e);
+					if (edgeNeeded(e))
+					  edges.add(e);
 					
 					
 					Node down = new Node(x, y+1, img.getRGB(x, y+1));
 					nodes.put((((long) x) << 16 + ((long) y+1)), n);
 					e = new Edge(n, down, n.intensity + down.intensity);
-					edges.add(e);
+					if (edgeNeeded(e))
+					  edges.add(e);
 				}
 
 
@@ -134,5 +145,17 @@ public class Stars {
 			Edge e = itr.next();
 			
 		}
+	}
+	
+	private static boolean edgeNeeded(Edge e) {
+	  // check that average intensity is high enough to be a star
+	  if ((e.nodeA.intensity + e.nodeB.intensity) / 2 < INTENSITY_THRESHOLD)
+	    return false;
+	  
+	  // check that difference between pixels isn't high indicating a star edge
+	  if (Math.abs(e.nodeA.intensity - e.nodeB.intensity) > GRADIENT_THRESHOLD)
+	    return false;
+	  
+	  return true;
 	}
 }
