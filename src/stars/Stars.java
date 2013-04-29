@@ -36,6 +36,12 @@ public class Stars {
       System.out.println("Input File Could Not Be Found.");
       System.exit(0);
     }
+    //Creating Constellations Map
+    ColorModel cm = img.getColorModel();
+    boolean alpha = cm.isAlphaPremultiplied();
+    WritableRaster raster = img.copyData(null);
+    constellationImg = new BufferedImage(cm, raster, alpha, null);
+
     //Gather basic file information
     width = img.getWidth();
     height = img.getHeight();
@@ -184,6 +190,25 @@ public class Stars {
     System.out.println("Amount of the Night Sky Representing Stars: " + Math.rint(( (double) (edgesSize)) / ((double)(width*height))*100) + "%");
     System.out.println("Average Star Size: " +  nodes.size() / stars.size());
     System.out.println("Total Pixels: " + width * height);
+
+    //Color the nodes
+    Graphics2D g2 = constellationImg.createGraphics();
+    BasicStroke bs = new BasicStroke(2);
+    g2.setStroke(bs);
+    g2.setColor(Color.RED);
+    for(Star s: stars){
+      g2.setPaint(Color.red);
+      g2.fill (new Ellipse2D.Double(s.getCenterX(), s.getCenterY(), s.getRadiusX(), s.getRadiusY()));
+
+    }
+    try {
+      // retrieve image
+      File outputfile = new File("constellation.bmp");
+      ImageIO.write(constellationImg, "bmp", outputfile);
+    } catch (IOException e) {
+      System.out.println("Could not write output file.");
+      System.exit(0);
+    }
   }
 
   private static boolean edgeNeeded(Edge e) {
