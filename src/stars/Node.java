@@ -24,6 +24,6 @@ public class Node {
    * @return
    */
   public static long makeCoordinate(int x, int y) {
-    return ((long) x) << 16 + ((long) y);
+    return (((long) x) << 16) + ((long) y);
   }
 }
