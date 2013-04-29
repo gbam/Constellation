@@ -140,9 +140,12 @@ public class Stars {
 			}
 		}
 		
+		HashSet<Node> starNodes = new HashSet<Node>();
 		// Kruskal's algorithm
 		while (edges.size() > 0) {
 		  Edge e = edges.poll();
+		  starNodes.add(e.nodeA);
+		  starNodes.add(e.nodeB);
 		  
 		  if (e == null)
 		    continue; // wo, what happened here...
@@ -150,6 +153,23 @@ public class Stars {
 			if (UnionFind.find(e.nodeA) != UnionFind.find(e.nodeB)) {
 			  UnionFind.union(e.nodeA, e.nodeB);
 			}
+		}
+		
+		List<Star> stars = new ArrayList<Star>();
+		// Go through all star nodes and create list of Stars (ie cluster of nodes)
+		for (Node n : starNodes) {
+		  Star s = new Star(n);
+		  
+		  int i = stars.indexOf(s);
+		  // if star object is already created for this cluster
+		  if (i != -1)
+		    s = stars.get(i);
+		  
+		  s.addPixel(n);
+		  
+		  // if this is a brand new star
+		  if (i == -1) 
+		    stars.add(s);
 		}
 	}
 	
