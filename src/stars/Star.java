@@ -1,10 +1,10 @@
 package stars;
 
 public class Star {
-  public int centerX;
-  public int centerY;
-  public int radiusX; // ellipse so need to radii
-  public int radiusY;
+  private double centerX;
+  private double centerY;
+  private double radiusX; // ellipse so need to radii
+  private double radiusY;
 
   private int maxX = Integer.MIN_VALUE;
   private int minX = Integer.MAX_VALUE;
@@ -20,6 +20,30 @@ public class Star {
     radiusX = 0;
     radiusY = 0;
     parent = n;
+  }
+  
+  public long getCenter() {
+    return ((long) getCenterX()) << 16 + ((long) getCenterY());
+  }
+  
+  public int getCenterX() {
+    return (int) Math.round(centerX);
+  }
+  
+  public int getCenterY() {
+    return (int) Math.round(centerY);
+  }
+  
+  public long getRadius() {
+    return ((long) getRadiusX()) << 16 + ((long) getRadiusY());
+  }
+  
+  public int getRadiusX() {
+    return (int) Math.round(radiusX);
+  }
+  
+  public int getRadiusY() {
+    return (int) Math.round(radiusY);
   }
 
   public void addPixel(Node n) {
