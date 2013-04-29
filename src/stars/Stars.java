@@ -93,7 +93,7 @@ public class Stars {
 				//Covers the bottom row
 				else if(y + 1 == height){
 					if(x+1 != width){
-					Node n  = nodes.get((x << 16) + y);
+					n  = nodes.get((x << 16) + y);
 					Node right = nodes.get(((x+1) << 16) + y);
 					Edge e = new Edge(n, right, n.intensity + right.intensity);
 					edges.add(e);
