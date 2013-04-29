@@ -140,10 +140,16 @@ public class Stars {
 			}
 		}
 		
-		Iterator<Edge> itr = edges.iterator();
-		while (itr.hasNext()){
-			Edge e = itr.next();
+		// Kruskal's algorithm
+		while (edges.size() > 0) {
+		  Edge e = edges.poll();
+		  
+		  if (e == null)
+		    continue; // wo, what happened here...
 			
+			if (UnionFind.find(e.nodeA) != UnionFind.find(e.nodeB)) {
+			  UnionFind.union(e.nodeA, e.nodeB);
+			}
 		}
 	}
 	
