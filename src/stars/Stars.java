@@ -93,7 +93,7 @@ public class Stars {
 				//Covers the bottom row
 				else if(y + 1 == height){
 					if(x+1 != width){
-					Node current  = nodes.get((x << 16) + y);
+					Node n  = nodes.get((x << 16) + y);
 					Node right = nodes.get(((x+1) << 16) + y);
 					Edge e = new Edge(n, right, n.intensity + right.intensity);
 					edges.add(e);
@@ -101,7 +101,7 @@ public class Stars {
 				}
 				//Covers the right most column
 				else if(x + 1 == width){
-					Node current  = nodes.get((x << 16) + y);
+					n  = nodes.get((x << 16) + y);
 					Node down = new Node(x, y+1, img.getRGB(x, y+1));
 					nodes.put((((long) x) << 16 + ((long) y+1)), n);
 					Edge e = new Edge(n, down, n.intensity + down.intensity);
@@ -127,6 +127,12 @@ public class Stars {
 
 
 			}
+		}
+		
+		Iterator<Edge> itr = edges.iterator();
+		while (itr.hasNext()){
+			Edge e = itr.next();
+			
 		}
 	}
 }

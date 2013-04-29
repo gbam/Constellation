@@ -1,7 +1,8 @@
 package stars;
 
 public class Node {
-	int x, y, intensity;
+	int x, y, intensity, rank;
+	Node parent; 
 	
 	public Node(int x, int y, int rgb){
 	    int red = (rgb >> 16) & 0xff;
@@ -10,6 +11,12 @@ public class Node {
 	    this.intensity = Math.max(red, Math.max(blue,green));
 		this.x = x;
 		this.y = y;
+		this.parent = null;
+		rank = 0;
+				
 	}
+	
+	
+	
 
 }
