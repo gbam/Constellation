@@ -1,6 +1,13 @@
 package stars;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics2D;
+import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -10,7 +17,7 @@ import javax.imageio.ImageIO;
 public class Stars {
 
   private static int minIntensity = 64;
-  private static String inputFileName = "stars.jpg";
+  private static String inputFileName = "stars.bmp";
   // right now these are very uneducated guesses...
   public static final int INTENSITY_THRESHOLD = 200;
   public static final int GRADIENT_THRESHOLD = 45;
@@ -35,7 +42,11 @@ public class Stars {
     pixelTotal = width * height;
 
     Map<Long, Node> nodes = new HashMap<Long, Node>();
-    Queue<Edge> edges = new PriorityQueue<Edge>();
+    PriorityQueue<Edge> edges = new PriorityQueue<Edge>(width * height, new Comparator<Edge>() {
+      public int compare(Edge e1, Edge e2) {
+        return e1.weight - e2.weight;
+      };
+    });
     //Iterate through buffered image
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {				
@@ -136,6 +147,7 @@ public class Stars {
     }
 
     HashSet<Node> starNodes = new HashSet<Node>();
+    int edgesSize = edges.size();
     // Kruskal's algorithm
     while (edges.size() > 0) {
       Edge e = edges.poll();
@@ -166,6 +178,12 @@ public class Stars {
       if (i == -1) 
         stars.add(s);
     }
+
+    System.out.println("Number of Stars: " + stars.size());
+    System.out.println("Width: " + width + " Height: " + height);
+    System.out.println("Amount of the Night Sky Representing Stars: " + Math.rint(( (double) (edgesSize)) / ((double)(width*height))*100) + "%");
+    System.out.println("Average Star Size: " +  nodes.size() / stars.size());
+    System.out.println("Total Pixels: " + width * height);
   }
 
   private static boolean edgeNeeded(Edge e) {

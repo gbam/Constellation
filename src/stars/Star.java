@@ -1,10 +1,10 @@
 package stars;
 
 public class Star {
-  public double centerX;
-  public double centerY;
-  public double radiusX; // ellipse so need to radii
-  public double radiusY;
+  public int centerX;
+  public int centerY;
+  public int radiusX; // ellipse so need to radii
+  public int radiusY;
 
   private int maxX = Integer.MIN_VALUE;
   private int minX = Integer.MAX_VALUE;
