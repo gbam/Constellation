@@ -19,7 +19,7 @@ public class Star {
     centerY = -1;
     radiusX = 0;
     radiusY = 0;
-    parent = n;
+    parent = (n.parent == null) ? n : n.parent;
   }
   
   public long getCenter() {
