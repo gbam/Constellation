@@ -185,7 +185,7 @@ public class Stars {
 
     System.out.println("Number of Stars: " + stars.size());
     System.out.println("Width: " + width + " Height: " + height);
-    System.out.println("Amount of the Night Sky Representing Stars: " + Math.rint(( (double) (edgesSize)) / ((double)(width*height))*100) + "%");
+    System.out.println("Amount of the Night Sky Representing Stars: " + Math.rint(( (double) (starNodes.size())) / ((double)(width*height))*100) + "%");
     System.out.println("Average Star Size: " +  nodes.size() / stars.size());
     System.out.println("Total Pixels: " + width * height);
 
