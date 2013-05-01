@@ -175,21 +175,18 @@ public class Stars {
     }
     System.out.println("Number of parents after union find: " + parents.size());
 
-    List<Star> stars = new ArrayList<Star>();
+    HashMap<Node, Star> stars = new HashMap<Node, Star>();
     // Go through all star nodes and create list of Stars (ie cluster of nodes)
     for (Node n : starNodes) {
-      Star s = new Star(n);
-
-      int i = stars.indexOf(s);
-      // if star object is already created for this cluster
-      if (i != -1)
-        s = stars.get(i);
+      Star s;
+      if (stars.containsKey(n.parent))
+        s = stars.get(n.parent);
+      else
+        s = new Star(n);
 
       s.addPixel(n);
 
-      // if this is a brand new star
-      if (i == -1) 
-        stars.add(s);
+      stars.put(n.parent, s);
     }
     
     // Color star pixels red in an image to see if they're identified correctly
@@ -199,7 +196,7 @@ public class Stars {
     }
     // color parent pixel of star yellow
     color = Color.YELLOW.getRGB();
-    for (Star s : stars) {
+    for (Star s : stars.values()) {
       starPixelImg.setRGB(s.parent.x, s.parent.y, color);
     }
     // write out image
@@ -222,7 +219,7 @@ public class Stars {
     BasicStroke bs = new BasicStroke(2);
     g2.setStroke(bs);
     g2.setColor(Color.RED);
-    for(Star s: stars){
+    for(Star s : stars.values()){
       g2.setPaint(Color.red);
       g2.fill (new Ellipse2D.Double(s.getCenterX(), s.getCenterY(), s.getRadiusX(), s.getRadiusY()));
 
