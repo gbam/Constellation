@@ -7,7 +7,7 @@ public class UnionFind {
       return n;
     }
     else{
-      Node parent = n.parent;
+      Node parent = find(n.parent);
       n.parent = parent;
       return parent;
     }

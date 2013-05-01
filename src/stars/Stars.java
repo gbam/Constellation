@@ -168,6 +168,12 @@ public class Stars {
         UnionFind.union(e.nodeA, e.nodeB);
       }
     }
+    
+    HashSet<Node> parents = new HashSet<Node>();
+    for (Node n : starNodes) {
+      parents.add(n.parent);
+    }
+    System.out.println("Number of parents after union find: " + parents.size());
 
     List<Star> stars = new ArrayList<Star>();
     // Go through all star nodes and create list of Stars (ie cluster of nodes)
