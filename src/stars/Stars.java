@@ -93,7 +93,7 @@ public class Stars {
             if (edgeNeeded(e))
               edges.add(e);
 
-            Node right = new Node(x+1, y, img.getRGB(x, y));
+            Node right = new Node(x+1, y, img.getRGB(x+1, y));
             nodes.put(right.getCoordinate(), right);
             e = new Edge(n, right, n.intensity + right.intensity);
             if (edgeNeeded(e))
@@ -112,7 +112,7 @@ public class Stars {
         else if(y + 1 == height){
           if(x+1 != width){
             n  = nodes.get(Node.makeCoordinate(x, y));
-            Node right = new Node(x+1, y, img.getRGB(x, y));
+            Node right = new Node(x+1, y, img.getRGB(x+1, y));
             nodes.put(right.getCoordinate(), right);
             Edge e = new Edge(n, right, n.intensity + right.intensity);
             if (edgeNeeded(e))
@@ -133,7 +133,7 @@ public class Stars {
         else{
           n  = nodes.get(Node.makeCoordinate(x, y));
 
-          Node right = new Node(x+1, y, img.getRGB(x, y));
+          Node right = new Node(x+1, y, img.getRGB(x+1, y));
           nodes.put(right.getCoordinate(), right);
           Edge e = new Edge(n, right, n.intensity + right.intensity);
           if (edgeNeeded(e))
