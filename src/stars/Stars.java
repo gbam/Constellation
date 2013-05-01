@@ -19,8 +19,8 @@ public class Stars {
   private static int minIntensity = 64;
   private static String inputFileName = "stars.bmp";
   // right now these are very uneducated guesses...
-  public static final int INTENSITY_THRESHOLD = 200;
-  public static final int GRADIENT_THRESHOLD = 45;
+  public static final int INTENSITY_THRESHOLD = 64;
+  public static final int GRADIENT_THRESHOLD = 128;
 
   public static void main(String[] args) {
     //Variables
@@ -230,7 +230,8 @@ public class Stars {
 
   private static boolean edgeNeeded(Edge e) {
     // check that average intensity is high enough to be a star
-    if ((e.nodeA.intensity + e.nodeB.intensity) / 2 < INTENSITY_THRESHOLD)
+    //if ((e.nodeA.intensity + e.nodeB.intensity) / 2 < INTENSITY_THRESHOLD)
+    if (e.nodeA.intensity < INTENSITY_THRESHOLD || e.nodeB.intensity < INTENSITY_THRESHOLD)
       return false;
 
     // check that difference between pixels isn't high indicating a star edge
