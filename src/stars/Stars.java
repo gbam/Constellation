@@ -152,22 +152,6 @@ public class Stars {
         System.out.println("Finished (" + x + ", " + y + ")");
       }
     }
-    
-    // Color star pixelsred in an image to see if they're identified correctly
-    int color = Color.RED.getRGB();
-    Iterator<Edge> it = edges.iterator();
-    for (int i = 0; i < edges.size(); i++) {
-      Edge e = it.next();
-      starPixelImg.setRGB(e.nodeA.x, e.nodeA.y, color);
-      starPixelImg.setRGB(e.nodeB.x, e.nodeB.y, color);
-    }
-    try {
-      // retrieve image
-      File outputfile = new File("starPixels.bmp");
-      ImageIO.write(starPixelImg, "bmp", outputfile);
-    } catch (IOException e) {
-      System.out.println("Could not write output file.");
-    }
 
     HashSet<Node> starNodes = new HashSet<Node>();
     int edgesSize = edges.size();
@@ -200,6 +184,25 @@ public class Stars {
       // if this is a brand new star
       if (i == -1) 
         stars.add(s);
+    }
+    
+    // Color star pixels red in an image to see if they're identified correctly
+    int color = Color.RED.getRGB();
+    for (Node n : starNodes) {
+      starPixelImg.setRGB(n.x, n.y, color);
+    }
+    // color parent pixel of star yellow
+    color = Color.YELLOW.getRGB();
+    for (Star s : stars) {
+      starPixelImg.setRGB(s.parent.x, s.parent.y, color);
+    }
+    // write out image
+    try {
+      // retrieve image
+      File outputfile = new File("starPixels.bmp");
+      ImageIO.write(starPixelImg, "bmp", outputfile);
+    } catch (IOException e) {
+      System.out.println("Could not write output file.");
     }
 
     System.out.println("Number of Stars: " + stars.size());
