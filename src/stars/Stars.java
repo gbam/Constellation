@@ -26,6 +26,7 @@ public class Stars {
     //Variables
     int width, height, pixelTotal;
     BufferedImage constellationImg;
+    BufferedImage starPixelImg;
 
     ////////Reading Input Files//////// 
     File in = new File(inputFileName);
@@ -39,8 +40,10 @@ public class Stars {
     //Creating Constellations Map
     ColorModel cm = img.getColorModel();
     boolean alpha = cm.isAlphaPremultiplied();
-    WritableRaster raster = img.copyData(null);
-    constellationImg = new BufferedImage(cm, raster, alpha, null);
+    WritableRaster rasterConstellation = img.copyData(null);
+    constellationImg = new BufferedImage(cm, rasterConstellation, alpha, null);
+    WritableRaster rasterStar = img.copyData(null);
+    starPixelImg = new BufferedImage(cm, rasterStar, alpha, null);
 
     //Gather basic file information
     width = img.getWidth();
@@ -148,6 +151,22 @@ public class Stars {
         }
         System.out.println("Finished (" + x + ", " + y + ")");
       }
+    }
+    
+    // Color star pixelsred in an image to see if they're identified correctly
+    int color = Color.RED.getRGB();
+    Iterator<Edge> it = edges.iterator();
+    for (int i = 0; i < edges.size(); i++) {
+      Edge e = it.next();
+      starPixelImg.setRGB(e.nodeA.x, e.nodeA.y, color);
+      starPixelImg.setRGB(e.nodeB.x, e.nodeB.y, color);
+    }
+    try {
+      // retrieve image
+      File outputfile = new File("starPixels.bmp");
+      ImageIO.write(starPixelImg, "bmp", outputfile);
+    } catch (IOException e) {
+      System.out.println("Could not write output file.");
     }
 
     HashSet<Node> starNodes = new HashSet<Node>();
