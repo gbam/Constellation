@@ -154,24 +154,24 @@ public class Stars {
     }
 
     HashSet<Node> starNodes = new HashSet<Node>();
-    int edgesSize = edges.size();
     // Kruskal's algorithm
-    while (edges.size() > 0) {
-      Edge e = edges.poll();
-      starNodes.add(e.nodeA);
-      starNodes.add(e.nodeB);
-
-      if (e == null)
-        continue; // wo, what happened here...
-
-      if (UnionFind.find(e.nodeA) != UnionFind.find(e.nodeB)) {
-        UnionFind.union(e.nodeA, e.nodeB);
+    while (!edges.isEmpty()) {
+    	Edge e = edges.poll();
+      Node nodeA = nodes.get(Node.makeCoordinate(e.nodeA.x, e.nodeA.y));
+      Node nodeB = nodes.get(Node.makeCoordinate(e.nodeB.x, e.nodeB.y));
+      starNodes.add(nodeA);
+      starNodes.add(nodeB);
+      System.out.println("Edge of Node A: " + nodeA.x + ", " + nodeA.y + "--->" + nodeB.x + ", " + nodeB.y);
+      if (UnionFind.find(nodeA) != UnionFind.find(nodeB)) {
+      	UnionFind.union(nodeA, nodeB);
       }
     }
     
     HashSet<Node> parents = new HashSet<Node>();
     for (Node n : starNodes) {
-      parents.add(n.parent);
+    	if(!(parents.contains(UnionFind.find(n)))){
+      parents.add(UnionFind.find(n));
+    	}
     }
     System.out.println("Number of parents after union find: " + parents.size());
 
@@ -199,6 +199,9 @@ public class Stars {
     for (Star s : stars.values()) {
       starPixelImg.setRGB(s.parent.x, s.parent.y, color);
     }
+
+    
+    
     // write out image
     try {
       // retrieve image

@@ -19,15 +19,16 @@ public class UnionFind {
     if(aRoot == bRoot){
       return false;
     }
-    if(a.rank < b.rank){
-      b.parent = a;
+    if(aRoot.rank > bRoot.rank){
+    	bRoot.parent = aRoot;
     }
-    else if(a.rank > b.rank){
-      a.parent = b;
+    else if(aRoot.rank < bRoot.rank){
+    	aRoot.parent = bRoot;
+
     }
     else{
-      b.parent = a;
-      a.rank = a.rank +1;
+    	bRoot.parent = aRoot;
+      aRoot.rank = aRoot.rank +1;
     }
     return true;
 
