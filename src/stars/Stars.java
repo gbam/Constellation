@@ -21,6 +21,7 @@ public class Stars {
   // right now these are very uneducated guesses...
   public static final int INTENSITY_THRESHOLD = 64;
   public static final int GRADIENT_THRESHOLD = 128;
+  private static final int MAX_DISTANCE = 150;
 
   public static void main(String[] args) {
     //Variables
@@ -175,19 +176,43 @@ public class Stars {
     }
     System.out.println("Number of parents after union find: " + parents.size());
 
-    HashMap<Node, Star> stars = new HashMap<Node, Star>();
+    List<Star> stars = new ArrayList<Star>();
     // Go through all star nodes and create list of Stars (ie cluster of nodes)
     for (Node n : starNodes) {
-      Star s;
-      if (stars.containsKey(n.parent))
-        s = stars.get(n.parent);
-      else
+      Star s = new Star(n);
+      if (stars.contains(s)){
+        int index = stars.indexOf(s);
+        stars.get(index);
+      }
+      else{
         s = new Star(n);
-
+      }
       s.addPixel(n);
 
-      stars.put(n.parent, s);
+      stars.add(s);
     }
+    
+    List<Constellation> constel = new ArrayList<Constellation>();
+    for (Star s: stars){
+    	Double smallestDistance = Double.MAX_VALUE;
+    	Constellation cc = null;
+    	if(constel.isEmpty()){
+    		Constellation c = new Constellation(s, MAX_DISTANCE);
+    		constel.add(c);
+    	}
+    	for(Constellation c: constel){
+    		Double dist = c.distanceTo(s);
+    		if(dist != null && dist < smallestDistance){
+    			smallestDistance = dist;
+    			cc = c;
+    		}
+    	}
+    	if(cc == null){
+    		Constellation c = new Constellation(s, MAX_DISTANCE);
+    		constel.add(c);
+    	}
+    }
+    System.out.println("Number of Constellations: " + constel.size());
     
     // Color star pixels red in an image to see if they're identified correctly
     int color = Color.RED.getRGB();
@@ -196,9 +221,9 @@ public class Stars {
     }
     // color parent pixel of star yellow
     color = Color.YELLOW.getRGB();
-    for (Star s : stars.values()) {
-      starPixelImg.setRGB(s.parent.x, s.parent.y, color);
-    }
+  //  for (Star s : stars.values()) {
+   //   starPixelImg.setRGB(s.parent.x, s.parent.y, color);
+    //}
 
     
     
@@ -222,11 +247,11 @@ public class Stars {
     BasicStroke bs = new BasicStroke(2);
     g2.setStroke(bs);
     g2.setColor(Color.RED);
-    for(Star s : stars.values()){
-      g2.setPaint(Color.red);
-      g2.fill (new Ellipse2D.Double(s.getCenterX(), s.getCenterY(), s.getRadiusX(), s.getRadiusY()));
+    //for(Star s : stars.values()){
+     // g2.setPaint(Color.red);
+      //g2.fill (new Ellipse2D.Double(s.getCenterX(), s.getCenterY(), s.getRadiusX(), s.getRadiusY()));
 
-    }
+    //}
     try {
       // retrieve image
       File outputfile = new File("constellation.bmp");
