@@ -1,0 +1,1 @@
+INDEX VERSION 1.126+C:\Users\Greg\Documents\GitHub\Constellation\.metadata\.plugins\org.eclipse.jdt.core
