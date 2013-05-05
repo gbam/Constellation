@@ -21,8 +21,9 @@ public class Stars {
   // right now these are very uneducated guesses...
   public static final int INTENSITY_THRESHOLD = 64;
   public static final int GRADIENT_THRESHOLD = 128;
-  private static final int MAX_DISTANCE = 150;
-  private static final int RADIUS_THRESHOLD = 4;
+  private static final int MAX_DISTANCE = 75;
+  private static final int RADIUS_THRESHOLD = 3;
+  private static final int KRUSKAL_ITERATIONS = 200; // number of times to run kruskal's when building constellations
 
   public static void main(String[] args) {
     //Variables
@@ -91,17 +92,19 @@ public class Stars {
       }
     }
     
-    System.out.println("Star edges made.");
+    System.out.println("Star edges made. #: " + starEdgeQueue.size());
     
     // run Kruskal's alg on stars to form constellations
+    int iterations_left = KRUSKAL_ITERATIONS;
     ArrayList<StarEdge> constellationEdges = new ArrayList<StarEdge>();
-    while (!starEdgeQueue.isEmpty()) {
+    while (!starEdgeQueue.isEmpty() && iterations_left > 0) {
       StarEdge e = starEdgeQueue.poll();
        Star starA = e.starA;
        Star starB = e.starB;
        if (UnionFind.find(starA) != UnionFind.find(starB)) {
         UnionFind.union(starA, starB);
         constellationEdges.add(e);
+        iterations_left--;
        }
      }
     
@@ -125,6 +128,7 @@ public class Stars {
     System.out.println("Width: " + width + " Height: " + height);
     System.out.println("Amount of the Night Sky Representing Stars: " + Math.rint(( (double) (starNodes.size())) / ((double)(width*height))*100) + "%");
     System.out.println("Average Star Size: " +  starNodes.size() / stars.size());
+    System.out.println("Number of edges drawn: " + constellationEdges.size());
     System.out.println("Total Pixels: " + width * height);
 
     //Draw constellations
