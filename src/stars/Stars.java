@@ -22,6 +22,7 @@ public class Stars {
   public static final int INTENSITY_THRESHOLD = 64;
   public static final int GRADIENT_THRESHOLD = 128;
   private static final int MAX_DISTANCE = 150;
+  private static final int RADIUS_THRESHOLD = 4;
 
   public static void main(String[] args) {
     //Variables
@@ -58,8 +59,8 @@ public class Stars {
     StarSpace starSp = new StarSpace(width, height, MAX_DISTANCE);
     for (Star s : stars) {
       
-      // only add pixels with diameter 4+
-      if (Math.max(s.getRadiusX(), s.getRadiusY()) > 3)
+      // only add stars with large enough radius
+      if (Math.max(s.getRadiusX(), s.getRadiusY()) >= RADIUS_THRESHOLD)
         starSp.add(s);
     }
     
@@ -78,7 +79,7 @@ public class Stars {
     for (int i = 0; i < stars.size(); i++) {
       Star s1 = stars.get(i);
       // if star isn't big enough don't worry about it
-      if (Math.max(s1.getRadiusX(), s1.getRadiusY()) < 4)
+      if (Math.max(s1.getRadiusX(), s1.getRadiusY()) < RADIUS_THRESHOLD)
         continue;
       List<Star> neighbors = starSp.getNeighbors(s1, MAX_DISTANCE);
       for (Star s2 : neighbors) {
