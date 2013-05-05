@@ -71,8 +71,8 @@ public class Star {
       return;
     }
 
-    radiusX = maxX - minX;
-    radiusY = maxY - minY;
+    radiusX = (maxX - minX)/ 2;
+    radiusY = (maxY - minY) / 2;
   }
 
   /* (non-Javadoc)
