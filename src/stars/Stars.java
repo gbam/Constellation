@@ -30,21 +30,11 @@ public class Stars {
     BufferedImage starPixelImg;
 
     ////////Reading Input Files//////// 
-    File in = new File(inputFileName);
-    BufferedImage img = null;
-    try {
-      img = ImageIO.read(in);
-    } catch (IOException ioException) {
-      System.out.println("Input File Could Not Be Found.");
-      System.exit(0);
-    }
+    BufferedImage img = readImage(inputFileName);
+    
     //Creating Constellations Map
-    ColorModel cm = img.getColorModel();
-    boolean alpha = cm.isAlphaPremultiplied();
-    WritableRaster rasterConstellation = img.copyData(null);
-    constellationImg = new BufferedImage(cm, rasterConstellation, alpha, null);
-    WritableRaster rasterStar = img.copyData(null);
-    starPixelImg = new BufferedImage(cm, rasterStar, alpha, null);
+    constellationImg = copyImage(img);
+    starPixelImg = copyImage(img);
 
     //Gather basic file information
     width = img.getWidth();
@@ -324,5 +314,24 @@ public class Stars {
       return false;
 
     return true;
+  }
+  
+  private static BufferedImage readImage(String filename) {
+    File in = new File(filename);
+    BufferedImage img = null;
+    try {
+      img = ImageIO.read(in);
+    } catch (IOException ioException) {
+      System.out.println("Input File Could Not Be Found.");
+      System.exit(0);
+    }
+    return img;
+  }
+  
+  private static BufferedImage copyImage(BufferedImage in) {
+    ColorModel cm = in.getColorModel();
+    boolean alpha = cm.isAlphaPremultiplied();
+    WritableRaster rasterConstellation = in.copyData(null);
+    return new BufferedImage(cm, rasterConstellation, alpha, null);
   }
 }
