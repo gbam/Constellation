@@ -51,42 +51,9 @@ public class Stars {
     buildPixelEdges(img, nodes, edges);
 
     HashSet<Node> starNodes = new HashSet<Node>();
-    // Kruskal's algorithm
-    while (!edges.isEmpty()) {
-    	Edge e = edges.poll();
-      Node nodeA = nodes.get(Node.makeCoordinate(e.nodeA.x, e.nodeA.y));
-      Node nodeB = nodes.get(Node.makeCoordinate(e.nodeB.x, e.nodeB.y));
-      starNodes.add(nodeA);
-      starNodes.add(nodeB);
-      System.out.println("Edge of Node A: " + nodeA.x + ", " + nodeA.y + "--->" + nodeB.x + ", " + nodeB.y);
-      if (UnionFind.find(nodeA) != UnionFind.find(nodeB)) {
-      	UnionFind.union(nodeA, nodeB);
-      }
-    }
-    
-    HashSet<Node> parents = new HashSet<Node>();
-    for (Node n : starNodes) {
-    	if(!(parents.contains(UnionFind.find(n)))){
-      parents.add(UnionFind.find(n));
-    	}
-    }
-    System.out.println("Number of parents after union find: " + parents.size());
-
     List<Star> stars = new ArrayList<Star>();
-    // Go through all star nodes and create list of Stars (ie cluster of nodes)
-    for (Node n : starNodes) {
-      Star s = new Star(n);
-      if (stars.contains(s)){
-        int index = stars.indexOf(s);
-        s = stars.get(index);
-        s.addPixel(n);
-      }
-      else{
-        s = new Star(n);
-        s.addPixel(n);
-        stars.add(s);
-      }
-    }
+    findStars(nodes, edges, starNodes, stars);
+    
     
     StarSpace starSp = new StarSpace(width, height, MAX_DISTANCE);
     for (Star s : stars) {
@@ -338,6 +305,44 @@ public class Stars {
             edges.add(e);
         }
         System.out.println("Finished (" + x + ", " + y + ")");
+      }
+    }
+  }
+  
+  public static void findStars(Map<Long, Node> nodes, Queue<Edge> edges, Set<Node> starNodes, List<Star> stars) {
+ // Kruskal's algorithm
+    while (!edges.isEmpty()) {
+     Edge e = edges.poll();
+      Node nodeA = nodes.get(Node.makeCoordinate(e.nodeA.x, e.nodeA.y));
+      Node nodeB = nodes.get(Node.makeCoordinate(e.nodeB.x, e.nodeB.y));
+      starNodes.add(nodeA);
+      starNodes.add(nodeB);
+      System.out.println("Edge of Node A: " + nodeA.x + ", " + nodeA.y + "--->" + nodeB.x + ", " + nodeB.y);
+      if (UnionFind.find(nodeA) != UnionFind.find(nodeB)) {
+       UnionFind.union(nodeA, nodeB);
+      }
+    }
+    
+    HashSet<Node> parents = new HashSet<Node>();
+    for (Node n : starNodes) {
+     if(!(parents.contains(UnionFind.find(n)))){
+      parents.add(UnionFind.find(n));
+     }
+    }
+    System.out.println("Number of parents after union find: " + parents.size());
+
+    // Go through all star nodes and create list of Stars (ie cluster of nodes)
+    for (Node n : starNodes) {
+      Star s = new Star(n);
+      if (stars.contains(s)){
+        int index = stars.indexOf(s);
+        s = stars.get(index);
+        s.addPixel(n);
+      }
+      else{
+        s = new Star(n);
+        s.addPixel(n);
+        stars.add(s);
       }
     }
   }
