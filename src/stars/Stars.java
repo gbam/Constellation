@@ -105,30 +105,6 @@ public class Stars {
        }
      }
     
-    
-    
-    List<Constellation> constel = new ArrayList<Constellation>();
-    for (Star s: stars){
-    	Double smallestDistance = Double.MAX_VALUE;
-    	Constellation cc = null;
-    	if(constel.isEmpty()){
-    		Constellation c = new Constellation(s, MAX_DISTANCE);
-    		constel.add(c);
-    	}
-    	for(Constellation c: constel){
-    		Double dist = c.distanceTo(s);
-    		if(dist != null && dist < smallestDistance){
-    			smallestDistance = dist;
-    			cc = c;
-    		}
-    	}
-    	if(cc == null){
-    		Constellation c = new Constellation(s, MAX_DISTANCE);
-    		constel.add(c);
-    	}
-    }
-    System.out.println("Number of Constellations: " + constel.size());
-    
     // Color star pixels red in an image to see if they're identified correctly
     int color = Color.RED.getRGB();
     for (Node n : starNodes) {
