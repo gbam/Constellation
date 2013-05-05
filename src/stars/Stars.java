@@ -182,15 +182,63 @@ public class Stars {
       Star s = new Star(n);
       if (stars.contains(s)){
         int index = stars.indexOf(s);
-        stars.get(index);
+        s = stars.get(index);
+        s.addPixel(n);
       }
       else{
         s = new Star(n);
+        s.addPixel(n);
+        stars.add(s);
       }
-      s.addPixel(n);
-
-      stars.add(s);
     }
+    
+    StarSpace starSp = new StarSpace(width, height, MAX_DISTANCE);
+    for (Star s : stars) {
+      
+      // only add pixels with diameter 4+
+      if (Math.max(s.getRadiusX(), s.getRadiusY()) > 3)
+        starSp.add(s);
+    }
+    
+    // Gather all edges that are close enough together
+    PriorityQueue<StarEdge> starEdgeQueue = new PriorityQueue<StarEdge>(10, new Comparator<StarEdge>() {
+      public int compare(StarEdge e1, StarEdge e2) {
+        if (e1.weight > e2.weight)
+          return 1;
+        else if (e1.weight < e2.weight)
+          return -1;
+        else
+          return 0;
+      }
+    });
+    
+    for (int i = 0; i < stars.size(); i++) {
+      Star s1 = stars.get(i);
+      List<Star> neighbors = starSp.getNeighbors(s1, MAX_DISTANCE);
+      for (Star s2 : neighbors) {
+        if (s1 == s2)
+          continue;
+        int dist = (int)Math.round(s1.distanceTo(s2));
+
+        starEdgeQueue.add(new StarEdge(s1, s2, dist));
+      }
+    }
+    
+    System.out.println("Star edges made.");
+    
+    // run Kruskal's alg on stars to form constellations
+    ArrayList<StarEdge> constellationEdges = new ArrayList<StarEdge>();
+    while (!starEdgeQueue.isEmpty()) {
+      StarEdge e = starEdgeQueue.poll();
+       Star starA = e.starA;
+       Star starB = e.starB;
+       if (UnionFind.find(starA) != UnionFind.find(starB)) {
+        UnionFind.union(starA, starB);
+        constellationEdges.add(e);
+       }
+     }
+    
+    
     
     List<Constellation> constel = new ArrayList<Constellation>();
     for (Star s: stars){
@@ -239,14 +287,17 @@ public class Stars {
     System.out.println("Number of Stars: " + stars.size());
     System.out.println("Width: " + width + " Height: " + height);
     System.out.println("Amount of the Night Sky Representing Stars: " + Math.rint(( (double) (starNodes.size())) / ((double)(width*height))*100) + "%");
-    System.out.println("Average Star Size: " +  nodes.size() / stars.size());
+    System.out.println("Average Star Size: " +  starNodes.size() / stars.size());
     System.out.println("Total Pixels: " + width * height);
 
-    //Color the nodes
+    //Draw constellations
     Graphics2D g2 = constellationImg.createGraphics();
     BasicStroke bs = new BasicStroke(2);
     g2.setStroke(bs);
     g2.setColor(Color.RED);
+    for (StarEdge e : constellationEdges) {
+      g2.drawLine(e.starA.getCenterX(), e.starA.getCenterY(), e.starB.getCenterX(), e.starB.getCenterY());
+    }
     //for(Star s : stars.values()){
      // g2.setPaint(Color.red);
       //g2.fill (new Ellipse2D.Double(s.getCenterX(), s.getCenterY(), s.getRadiusX(), s.getRadiusY()));

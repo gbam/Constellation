@@ -34,6 +34,37 @@ public class UnionFind {
 
   }
 
+  public static Star find(Star s){
+    if(s.parentStar == null){
+      return s;
+    }
+    else{
+      Star parent = find(s.parentStar);
+      s.parentStar = parent;
+      return parent;
+    }
+  }
+  public static boolean union(Star a, Star b){
+    Star aRoot = find(a);
+    Star bRoot = find(b);
+
+    if(aRoot == bRoot){
+      return false;
+    }
+    if(aRoot.rank > bRoot.rank){
+     bRoot.parentStar = aRoot;
+    }
+    else if(aRoot.rank < bRoot.rank){
+     aRoot.parentStar = bRoot;
+
+    }
+    else{
+     bRoot.parentStar = aRoot;
+      aRoot.rank = aRoot.rank +1;
+    }
+    return true;
+
+  }
 
 
 }

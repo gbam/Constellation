@@ -13,6 +13,8 @@ public class Star {
 
   public Node parent = null; // parent of tree of all nodes in star
   public int numNodes = 0; // number of nodes in star
+  public Star parentStar = null;
+  int rank = 0;
 
   public Star(Node n) {
     centerX = -1;
@@ -110,5 +112,10 @@ public class Star {
       return false;
     }
     return true;
+  }
+  
+  public Double distanceTo(Star s){
+    Double d = Math.sqrt(Math.pow((double)(s.getCenterX()- centerX), 2) + Math.pow((double)(s.getCenterY() - centerY), 2));
+    return d;
   }
 }
