@@ -77,6 +77,9 @@ public class Stars {
     
     for (int i = 0; i < stars.size(); i++) {
       Star s1 = stars.get(i);
+      // if star isn't big enough don't worry about it
+      if (Math.max(s1.getRadiusX(), s1.getRadiusY()) < 4)
+        continue;
       List<Star> neighbors = starSp.getNeighbors(s1, MAX_DISTANCE);
       for (Star s2 : neighbors) {
         if (s1 == s2)
@@ -132,9 +135,9 @@ public class Stars {
     }
     // color parent pixel of star yellow
     color = Color.YELLOW.getRGB();
-  //  for (Star s : stars.values()) {
-   //   starPixelImg.setRGB(s.parent.x, s.parent.y, color);
-    //}
+    for (Star s : stars) {
+      starPixelImg.setRGB(s.parent.x, s.parent.y, color);
+    }
 
     
     
