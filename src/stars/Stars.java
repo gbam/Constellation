@@ -189,7 +189,7 @@ public class Stars {
     return true;
   }
   
-  private static BufferedImage readImage(String filename) {
+  public static BufferedImage readImage(String filename) {
     File in = new File(filename);
     BufferedImage img = null;
     try {
@@ -201,14 +201,14 @@ public class Stars {
     return img;
   }
   
-  private static BufferedImage copyImage(BufferedImage in) {
+  public static BufferedImage copyImage(BufferedImage in) {
     ColorModel cm = in.getColorModel();
     boolean alpha = cm.isAlphaPremultiplied();
     WritableRaster rasterConstellation = in.copyData(null);
     return new BufferedImage(cm, rasterConstellation, alpha, null);
   }
   
-  private static void buildPixelEdges(BufferedImage img, Map<Long, Node> nodes, PriorityQueue<Edge> edges) {
+  public static void buildPixelEdges(BufferedImage img, Map<Long, Node> nodes, PriorityQueue<Edge> edges) {
     int width = img.getWidth();
     int height = img.getHeight();
     //Iterate through buffered image
