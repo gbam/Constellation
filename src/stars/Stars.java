@@ -139,13 +139,7 @@ public class Stars {
     
     
     // write out image
-    try {
-      // retrieve image
-      File outputfile = new File("starPixels.bmp");
-      ImageIO.write(starPixelImg, "bmp", outputfile);
-    } catch (IOException e) {
-      System.out.println("Could not write output file.");
-    }
+    writeImage(starPixelImg, "starPixels.bmp");
 
     System.out.println("Number of Stars: " + stars.size());
     System.out.println("Width: " + width + " Height: " + height);
@@ -166,14 +160,7 @@ public class Stars {
       //g2.fill (new Ellipse2D.Double(s.getCenterX(), s.getCenterY(), s.getRadiusX(), s.getRadiusY()));
 
     //}
-    try {
-      // retrieve image
-      File outputfile = new File("constellation.bmp");
-      ImageIO.write(constellationImg, "bmp", outputfile);
-    } catch (IOException e) {
-      System.out.println("Could not write output file.");
-      System.exit(0);
-    }
+    writeImage(constellationImg, "constellation.bmp");
   }
 
   private static boolean edgeNeeded(Edge e) {
@@ -206,6 +193,18 @@ public class Stars {
     boolean alpha = cm.isAlphaPremultiplied();
     WritableRaster rasterConstellation = in.copyData(null);
     return new BufferedImage(cm, rasterConstellation, alpha, null);
+  }
+  
+  public static void writeImage(BufferedImage im, String filename) {
+    try {
+      // retrieve image
+      File outputfile = new File(filename);
+      int period = filename.lastIndexOf('.');
+      ImageIO.write(im, filename.substring(period+1), outputfile);
+    } catch (IOException e) {
+      System.out.println("Could not write output file.");
+      System.exit(0);
+    }
   }
   
   public static void buildPixelEdges(BufferedImage img, Map<Long, Node> nodes, PriorityQueue<Edge> edges) {
