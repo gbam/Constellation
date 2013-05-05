@@ -3,39 +3,32 @@ package stars;
 import java.util.ArrayList;
 
 public class Constellation {
-	private int starsCount;
-	public int centerX, centerY;
-	public int rank;
+	private int maxDistance, centerX, centerY, starsCount;
 
-	ArrayList<Node> stars;
-	public Constellation(Node s, int maxDistance){
-		stars = new ArrayList<Node>();
+	ArrayList<Star> stars;
+	public Constellation(Star s, int maxDistance){
+		stars = new ArrayList<Star>();
 		stars.add(s);
+		this.maxDistance = maxDistance;
 		starsCount++;
-		rank = 0;
-		centerX = s.x;
-		centerY = s.y;
+		centerX = s.getCenterX();
+		centerY = s.getCenterY();
 	}
 
-	public void addStar(Node s){
+	public void addStar(Star s){
 
 		stars.add(s);
-		centerY = (s.x + starsCount * centerY)/(starsCount+1);
-		centerX = (s.y + starsCount * centerX)/(starsCount+1);
+		centerY = s.getCenterY() + starsCount * centerY;
+		centerX = s.getCenterX() + starsCount * centerX;
 		starsCount++;
 
 	}
-	public Double distanceTo(Node s){
-		Double xCoord =  Math.exp((double)(s.x- centerX));
-		Double yCoord = Math.exp((double)(s.y - centerY));
-		Double d = xCoord + yCoord;
-		d = Math.sqrt(d);
-		return d;
+	public Double distanceTo(Star s){
+		Double d = Math.exp((double)(s.getCenterX()- centerX)) + Math.exp((double)(s.getCenterY() - centerY));
+		if(d < maxDistance){
+return d;
+		}
+		else return null;
 	}
-
-	public ArrayList<Node>getStars(){
-		return stars;
-	}
-
 
 }
