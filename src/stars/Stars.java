@@ -47,102 +47,8 @@ public class Stars {
         return e1.weight - e2.weight;
       };
     });
-    //Iterate through buffered image
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {				
-        //The first node is created on its current iteration otherwise all nodes are created in the node above them.
-        Node n = null;
-
-        //Create the first node
-        if(x == 0 && y == 0){
-          n = new Node(x, y, img.getRGB(x, y));
-          //Hashmap (16 bits: x, 16 bits: y)
-          nodes.put(n.getCoordinate(), n);
-
-          Node right = new Node(x+1, y, img.getRGB(x+1, y));
-          nodes.put(right.getCoordinate(), right);
-          Edge e = new Edge(n, right, n.intensity + right.intensity);
-          if (edgeNeeded(e))
-            edges.add(e);
-
-          Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put(down.getCoordinate(), down);
-          e = new Edge(n, right, n.intensity + down.intensity);
-          if (edgeNeeded(e))
-            edges.add(e);
-
-        }
-        //Checks the first row
-        else if(y==0){
-          //This will be used to make the edge nodes
-          n = nodes.get(Node.makeCoordinate(x, y));
-
-          //Check if we have anything on the right
-          if(x+1 != width){
-            //This could be moved in the previous if block
-            //The first row will not have been created vs all other rows would have been.
-            Node down = new Node(x, y+1, img.getRGB(x, y+1));
-            nodes.put(down.getCoordinate(), down);
-            Edge e = new Edge(n, down, n.intensity + down.intensity);
-            if (edgeNeeded(e))
-              edges.add(e);
-
-            Node right = new Node(x+1, y, img.getRGB(x+1, y));
-            nodes.put(right.getCoordinate(), right);
-            e = new Edge(n, right, n.intensity + right.intensity);
-            if (edgeNeeded(e))
-              edges.add(e);
-          }
-          //If we are at the edge, don't add the right edge, duh.
-          else{
-            Node down = new Node(x, y+1, img.getRGB(x, y+1));
-            nodes.put(down.getCoordinate(), down);
-            Edge e = new Edge(n, down, n.intensity + down.intensity);
-            if (edgeNeeded(e))
-              edges.add(e);
-          }
-        }
-        //Covers the bottom row
-        else if(y + 1 == height){
-          if(x+1 != width){
-            n  = nodes.get(Node.makeCoordinate(x, y));
-            Node right = new Node(x+1, y, img.getRGB(x+1, y));
-            nodes.put(right.getCoordinate(), right);
-            Edge e = new Edge(n, right, n.intensity + right.intensity);
-            if (edgeNeeded(e))
-              edges.add(e);
-          }
-        }
-        //Covers the right most column
-        else if(x + 1 == width){
-          n  = nodes.get(Node.makeCoordinate(x, y));
-          Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put(down.getCoordinate(), down);
-          Edge e = new Edge(n, down, n.intensity + down.intensity);
-          if (edgeNeeded(e))
-            edges.add(e);
-
-        }
-        //Creates all the non first, bottom, or right nodes and relationships
-        else{
-          n  = nodes.get(Node.makeCoordinate(x, y));
-
-          Node right = new Node(x+1, y, img.getRGB(x+1, y));
-          nodes.put(right.getCoordinate(), right);
-          Edge e = new Edge(n, right, n.intensity + right.intensity);
-          if (edgeNeeded(e))
-            edges.add(e);
-
-
-          Node down = new Node(x, y+1, img.getRGB(x, y+1));
-          nodes.put(down.getCoordinate(), down);
-          e = new Edge(n, down, n.intensity + down.intensity);
-          if (edgeNeeded(e))
-            edges.add(e);
-        }
-        System.out.println("Finished (" + x + ", " + y + ")");
-      }
-    }
+    
+    buildPixelEdges(img, nodes, edges);
 
     HashSet<Node> starNodes = new HashSet<Node>();
     // Kruskal's algorithm
@@ -333,5 +239,106 @@ public class Stars {
     boolean alpha = cm.isAlphaPremultiplied();
     WritableRaster rasterConstellation = in.copyData(null);
     return new BufferedImage(cm, rasterConstellation, alpha, null);
+  }
+  
+  private static void buildPixelEdges(BufferedImage img, Map<Long, Node> nodes, PriorityQueue<Edge> edges) {
+    int width = img.getWidth();
+    int height = img.getHeight();
+    //Iterate through buffered image
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {    
+        //The first node is created on its current iteration otherwise all nodes are created in the node above them.
+        Node n = null;
+
+        //Create the first node
+        if(x == 0 && y == 0){
+          n = new Node(x, y, img.getRGB(x, y));
+          //Hashmap (16 bits: x, 16 bits: y)
+          nodes.put(n.getCoordinate(), n);
+
+          Node right = new Node(x+1, y, img.getRGB(x+1, y));
+          nodes.put(right.getCoordinate(), right);
+          Edge e = new Edge(n, right, n.intensity + right.intensity);
+          if (edgeNeeded(e))
+            edges.add(e);
+
+          Node down = new Node(x, y+1, img.getRGB(x, y+1));
+          nodes.put(down.getCoordinate(), down);
+          e = new Edge(n, right, n.intensity + down.intensity);
+          if (edgeNeeded(e))
+            edges.add(e);
+
+        }
+        //Checks the first row
+        else if(y==0){
+          //This will be used to make the edge nodes
+          n = nodes.get(Node.makeCoordinate(x, y));
+
+          //Check if we have anything on the right
+          if(x+1 != width){
+            //This could be moved in the previous if block
+            //The first row will not have been created vs all other rows would have been.
+            Node down = new Node(x, y+1, img.getRGB(x, y+1));
+            nodes.put(down.getCoordinate(), down);
+            Edge e = new Edge(n, down, n.intensity + down.intensity);
+            if (edgeNeeded(e))
+              edges.add(e);
+
+            Node right = new Node(x+1, y, img.getRGB(x+1, y));
+            nodes.put(right.getCoordinate(), right);
+            e = new Edge(n, right, n.intensity + right.intensity);
+            if (edgeNeeded(e))
+              edges.add(e);
+          }
+          //If we are at the edge, don't add the right edge, duh.
+          else{
+            Node down = new Node(x, y+1, img.getRGB(x, y+1));
+            nodes.put(down.getCoordinate(), down);
+            Edge e = new Edge(n, down, n.intensity + down.intensity);
+            if (edgeNeeded(e))
+              edges.add(e);
+          }
+        }
+        //Covers the bottom row
+        else if(y + 1 == height){
+          if(x+1 != width){
+            n  = nodes.get(Node.makeCoordinate(x, y));
+            Node right = new Node(x+1, y, img.getRGB(x+1, y));
+            nodes.put(right.getCoordinate(), right);
+            Edge e = new Edge(n, right, n.intensity + right.intensity);
+            if (edgeNeeded(e))
+              edges.add(e);
+          }
+        }
+        //Covers the right most column
+        else if(x + 1 == width){
+          n  = nodes.get(Node.makeCoordinate(x, y));
+          Node down = new Node(x, y+1, img.getRGB(x, y+1));
+          nodes.put(down.getCoordinate(), down);
+          Edge e = new Edge(n, down, n.intensity + down.intensity);
+          if (edgeNeeded(e))
+            edges.add(e);
+
+        }
+        //Creates all the non first, bottom, or right nodes and relationships
+        else{
+          n  = nodes.get(Node.makeCoordinate(x, y));
+
+          Node right = new Node(x+1, y, img.getRGB(x+1, y));
+          nodes.put(right.getCoordinate(), right);
+          Edge e = new Edge(n, right, n.intensity + right.intensity);
+          if (edgeNeeded(e))
+            edges.add(e);
+
+
+          Node down = new Node(x, y+1, img.getRGB(x, y+1));
+          nodes.put(down.getCoordinate(), down);
+          e = new Edge(n, down, n.intensity + down.intensity);
+          if (edgeNeeded(e))
+            edges.add(e);
+        }
+        System.out.println("Finished (" + x + ", " + y + ")");
+      }
+    }
   }
 }
