@@ -119,19 +119,29 @@ public class Stars {
 		g2.setStroke(bs);
 		g2.setColor(Color.RED);
 		for(Constellation cc: constellations){
-			g2.setColor(Color.RED);
-			constellationImg.setRGB(cc.centerX, cc.centerY, color);
-			g2.setColor(Color.YELLOW);
-			if(cc.stars.size() > 1){
-				for(int i = 0; i < cc.stars.size()-1; i++){
-					Star s = cc.stars.get(i);
-					Star s2 = cc.stars.get(i+1);
-					 g2.drawLine(s.getCenterX(), s.getCenterY(), s2.getCenterX(), s2.getCenterY());
-
-				}
+			cc.clean();
+			ArrayList<StarEdge> seList = cc.getStars();
+			for(StarEdge se: seList){
+				 g2.drawLine(se.cA.getCenterX(), se.cA.getCenterY(), se.cB.getCenterX(), se.cB.getCenterY());
 			}
-
 		}
+		
+		
+		
+		//for(Constellation cc: constellations){
+		//	g2.setColor(Color.RED);
+		//	constellationImg.setRGB(cc.centerX, cc.centerY, color);
+		//	g2.setColor(Color.YELLOW);
+			//if(cc.stars.size() > 1){
+			//	for(int i = 0; i < cc.stars.size()-1; i++){
+			//		Star s = cc.stars.get(i);
+			//		Star s2 = cc.stars.get(i+1);
+			//		 g2.drawLine(s.getCenterX(), s.getCenterY(), s2.getCenterX(), s2.getCenterY());
+
+			//}
+			//}
+
+		//}
 
 		//for (StarEdge e : constellationEdges) {
 		//      g2.drawLine(e.starA.getCenterX(), e.starA.getCenterY(), e.starB.getCenterX(), e.starB.getCenterY());
