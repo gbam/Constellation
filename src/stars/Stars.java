@@ -21,7 +21,7 @@ public class Stars {
 	// right now these are very uneducated guesses...
 	public static final int INTENSITY_THRESHOLD = 64;
 	public static final int GRADIENT_THRESHOLD = 128;
-	private static final int MAX_DISTANCE = 80;
+	private static int maxDistance;
 
 
 	public static void main(String[] args) {
@@ -57,12 +57,16 @@ public class Stars {
 		List<Constellation> constellations = new ArrayList<Constellation>();
 		//Iterate through all the stars
 		System.out.println("Number of Stars: " + stars.size());
+		System.out.println("Height + Width / #Stars:  " + (height * width) / (2  * stars.size()));
+		System.out.println("Sqrt Height * Width " + Math.sqrt(height * width));
+		//maxDistance = (height + width) / stars.size();
+		maxDistance = width;
 		for(Star s: stars){
 			Double closestDistance = Double.MAX_VALUE;
 			Constellation c = null;
 			//If there are no constellations we need to make one
 			if(constellations.isEmpty()){
-				c = new Constellation(s, MAX_DISTANCE);
+				c = new Constellation(s, maxDistance);
 				constellations.add(c);
 			}
 			//Otherwise check all the constellations & find the closest one
@@ -70,7 +74,7 @@ public class Stars {
 				for(Constellation cc: constellations){
 					Double dist2star = cc.distanceTo(s);
 					if(dist2star != 0.0 && dist2star < closestDistance){
-						System.out.println("Closest Distance: " + dist2star);
+
 						c = cc;
 					}
 
@@ -78,7 +82,7 @@ public class Stars {
 			}
 			//If it's still empty, we need to create a new constellation for that star
 			if(c == null){
-				c = new Constellation(s, MAX_DISTANCE);
+				c = new Constellation(s, maxDistance);
 				constellations.add(c);
 			}
 			//Else add that star to the closest constellation
