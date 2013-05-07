@@ -3,14 +3,14 @@ package stars;
 import java.util.ArrayList;
 
 public class Constellation {
-	private int maxDistance, centerX, centerY, starsCount;
+	public int centerX, centerY, starsCount, maxDistance;
 
 	ArrayList<Star> stars;
 	public Constellation(Star s, int maxDistance){
 		stars = new ArrayList<Star>();
 		stars.add(s);
-		this.maxDistance = maxDistance;
 		starsCount++;
+		this.maxDistance = maxDistance;
 		centerX = s.getCenterX();
 		centerY = s.getCenterY();
 	}
@@ -21,14 +21,18 @@ public class Constellation {
 		centerY = s.getCenterY() + starsCount * centerY;
 		centerX = s.getCenterX() + starsCount * centerX;
 		starsCount++;
+		centerY = centerY / starsCount;
+		centerX = centerX / starsCount;
 
 	}
 	public Double distanceTo(Star s){
-		Double d = Math.exp((double)(s.getCenterX()- centerX)) + Math.exp((double)(s.getCenterY() - centerY));
-		if(d < maxDistance){
-return d;
-		}
-		else return null;
+		Double xValue = (double) (s.getCenterX()- centerX);
+		Double yValue = (double) (s.getCenterY() - centerY);
+		Double d = xValue * xValue + yValue * yValue;
+		d = Math.sqrt(d);
+		if(d < maxDistance)return d;
+		else
+			return Double.MAX_VALUE;
 	}
 
 }
