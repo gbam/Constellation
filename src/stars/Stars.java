@@ -60,7 +60,10 @@ public class Stars {
 		System.out.println("Height + Width / #Stars:  " + (height * width) / (2  * stars.size()));
 		System.out.println("Sqrt Height * Width " + Math.sqrt(height * width));
 		//maxDistance = (height + width) / stars.size();
-		maxDistance = width;
+		maxDistance = (height * width) / (5*stars.size());
+
+
+
 		for(Star s: stars){
 			Double closestDistance = Double.MAX_VALUE;
 			Constellation c = null;
@@ -79,18 +82,19 @@ public class Stars {
 					}
 
 				}
-			}
-			//If it's still empty, we need to create a new constellation for that star
-			if(c == null){
-				c = new Constellation(s, maxDistance);
-				constellations.add(c);
-			}
-			//Else add that star to the closest constellation
-			else if(constellations.contains(c)){
+				//If it's still empty, we need to create a new constellation for that star
+				if(c == null){
+					c = new Constellation(s, maxDistance);
+					constellations.add(c);
+				}
+				//Else add that star to the closest constellation
+				else if(constellations.contains(c)){
 
-				c.addStar(s);
+					c.addStar(s);
 
+				}
 			}
+
 
 		}
 
@@ -123,27 +127,27 @@ public class Stars {
 		g2.setStroke(bs);
 		g2.setColor(Color.RED);
 		for(Constellation cc: constellations){
-			cc.clean();
+			//cc.clean();
 			ArrayList<StarEdge> seList = cc.getStars();
 			for(StarEdge se: seList){
-				 g2.drawLine(se.cA.getCenterX(), se.cA.getCenterY(), se.cB.getCenterX(), se.cB.getCenterY());
+				g2.drawLine(se.cA.getCenterX(), se.cA.getCenterY(), se.cB.getCenterX(), se.cB.getCenterY());
 			}
 		}
-		
-		
-		
+
+
+
 		//for(Constellation cc: constellations){
 		//	g2.setColor(Color.RED);
 		//	constellationImg.setRGB(cc.centerX, cc.centerY, color);
 		//	g2.setColor(Color.YELLOW);
-			//if(cc.stars.size() > 1){
-			//	for(int i = 0; i < cc.stars.size()-1; i++){
-			//		Star s = cc.stars.get(i);
-			//		Star s2 = cc.stars.get(i+1);
-			//		 g2.drawLine(s.getCenterX(), s.getCenterY(), s2.getCenterX(), s2.getCenterY());
+		//if(cc.stars.size() > 1){
+		//	for(int i = 0; i < cc.stars.size()-1; i++){
+		//		Star s = cc.stars.get(i);
+		//		Star s2 = cc.stars.get(i+1);
+		//		 g2.drawLine(s.getCenterX(), s.getCenterY(), s2.getCenterX(), s2.getCenterY());
 
-			//}
-			//}
+		//}
+		//}
 
 		//}
 
